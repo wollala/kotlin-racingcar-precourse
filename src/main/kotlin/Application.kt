@@ -1,7 +1,8 @@
-package main
-
-import controller.RaceController
+import controller.LottoController
+import view.LottoView
 
 fun main() {
-    RaceController.startRace()
+    val view = LottoView()
+    val controller = LottoController(view)
+    controller.start()
 }
