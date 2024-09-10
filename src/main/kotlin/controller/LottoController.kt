@@ -3,9 +3,8 @@ package controller
 import model.Lotto
 import model.LottoResult
 import view.LottoView
-import kotlin.random.Random
 
-class LottoController(private val view: LottoView) {
+class LottoController(val view: LottoView) {
 
     fun start() {
         // 1. 구입 금액 입력받기
@@ -43,16 +42,16 @@ class LottoController(private val view: LottoView) {
     }
 
     // 로또 번호 생성
-    private fun generateLottos(count: Int): List<Lotto> {
+    fun generateLottos(count: Int): List<Lotto> {
         return (1..count).map { Lotto(generateRandomLottoNumbers()) }
     }
 
-    private fun generateRandomLottoNumbers(): List<Int> {
+    fun generateRandomLottoNumbers(): List<Int> {
         return (1..Lotto.MAX_NUMBER).shuffled().take(Lotto.NUMBER_COUNT).sorted()
     }
 
     // 로또 결과 확인
-    private fun checkLottoResults(lottos: List<Lotto>, winningNumbers: List<Int>, bonusNumber: Int): List<LottoResult> {
+    fun checkLottoResults(lottos: List<Lotto>, winningNumbers: List<Int>, bonusNumber: Int): List<LottoResult> {
         return lottos.map { lotto ->
             val matchCount = lotto.numbers.count { it in winningNumbers }
             val isBonusMatched = bonusNumber in lotto.numbers
@@ -61,7 +60,7 @@ class LottoController(private val view: LottoView) {
     }
 
     // 당첨 금액 계산
-    private fun calculatePrize(matchCount: Int, isBonusMatched: Boolean): Int {
+    fun calculatePrize(matchCount: Int, isBonusMatched: Boolean): Int {
         return when (matchCount) {
             3 -> 5000
             4 -> 50000
@@ -72,12 +71,12 @@ class LottoController(private val view: LottoView) {
     }
 
     // 당첨 통계 계산
-    private fun countWinnings(lottoResults: List<LottoResult>): Map<Int, Int> {
+    fun countWinnings(lottoResults: List<LottoResult>): Map<Int, Int> {
         return lottoResults.groupingBy { it.matchCount }.eachCount()
     }
 
     // 수익률 계산
-    private fun calculateProfitRate(lottoResults: List<LottoResult>, purchaseAmount: Int): Double {
+    fun calculateProfitRate(lottoResults: List<LottoResult>, purchaseAmount: Int): Double {
         val totalPrize = lottoResults.sumOf { it.prize }
         return totalPrize.toDouble() / purchaseAmount
     }
